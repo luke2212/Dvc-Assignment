@@ -1,0 +1,48 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py data/samsungData.csv
+    deps:
+    - data/samsungData.csv
+    - src/prepare.py
+    params:
+    - prepare.subject
+    outs:
+    - data/prepared
+  svd:
+    cmd: python src/svd.py
+    deps:
+    - data/prepared
+    - src/svd.py
+    params:
+    - analyze.dendogram
+    - prepare.subject
+    outs:
+    - data/SVD
+  kmeans:
+    cmd: python src/kmeans.py
+    deps:
+    - data/prepared
+    - src/kmeans.py
+    params:
+    - kmeans.activity
+    - prepare.subject
+  dendogram:
+    cmd: python src/dendogram.py
+    deps:
+    - data/prepared
+    - src/dendogram.py
+    params:
+    - analyze.dendogram
+    - prepare.subject
+    outs:
+    - data/dendograms
+  analyze:
+    cmd: python src/analyze.py
+    deps:
+    - data/prepared
+    - src/analyze.py
+    params:
+    - analyze.features
+    - prepare.subject
+    outs:
+    - data/analysis

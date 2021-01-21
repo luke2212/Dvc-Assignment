@@ -1,0 +1,94 @@
+prepare:
+  cmd: python src/prepare.py data/samsungData.csv
+  deps:
+  - path: data/samsungData.csv
+    md5: 04a9687f1f6b92a872e727c029777e55
+    size: 48150152
+  - path: src/prepare.py
+    md5: 2852d2e090b50320cdfb7307c1573a34
+    size: 760
+  params:
+    params.yaml:
+      prepare.subject: 6
+  outs:
+  - path: data/prepared
+    md5: 52b21982fb03414a81d0d886e3fab63c.dir
+    size: 2249218
+    nfiles: 1
+svd:
+  cmd: python src/svd.py
+  deps:
+  - path: data/prepared
+    md5: 52b21982fb03414a81d0d886e3fab63c.dir
+    size: 2249218
+    nfiles: 1
+  - path: src/svd.py
+    md5: 5f321fd85fd5e5cb436d5b176f716dc6
+    size: 1780
+  params:
+    params.yaml:
+      analyze.dendogram:
+      - 9
+      - 12
+      prepare.subject: 6
+  outs:
+  - path: data/SVD
+    md5: 2c529bfe3de48c0c949449089f86fb24.dir
+    size: 106306
+    nfiles: 2
+kmeans:
+  cmd: python src/kmeans.py
+  deps:
+  - path: data/prepared
+    md5: 52b21982fb03414a81d0d886e3fab63c.dir
+    size: 2249218
+    nfiles: 1
+  - path: src/kmeans.py
+    md5: 716d7bb2d483f03ef2cc2158e09b9175
+    size: 904
+  params:
+    params.yaml:
+      kmeans.activity: walk
+      prepare.subject: 6
+dendogram:
+  cmd: python src/dendogram.py
+  deps:
+  - path: data/prepared
+    md5: 52b21982fb03414a81d0d886e3fab63c.dir
+    size: 2249218
+    nfiles: 1
+  - path: src/dendogram.py
+    md5: b1bd26ab1666f27d92f4cb7a675be4e5
+    size: 1190
+  params:
+    params.yaml:
+      analyze.dendogram:
+      - 9
+      - 12
+      prepare.subject: 6
+  outs:
+  - path: data/dendograms
+    md5: b7ef65cc301376d961afcf19dce6f76c.dir
+    size: 32620
+    nfiles: 1
+analyze:
+  cmd: python src/analyze.py
+  deps:
+  - path: data/prepared
+    md5: 52b21982fb03414a81d0d886e3fab63c.dir
+    size: 2249218
+    nfiles: 1
+  - path: src/analyze.py
+    md5: 2aba557938cddba3991a7a9af1cce2b1
+    size: 1196
+  params:
+    params.yaml:
+      analyze.features:
+      - 9
+      - 12
+      prepare.subject: 6
+  outs:
+  - path: data/analysis
+    md5: 570b968465005a1a374c0f4f6d493a47.dir
+    size: 61535
+    nfiles: 1

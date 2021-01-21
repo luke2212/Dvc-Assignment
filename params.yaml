@@ -1,0 +1,10 @@
+prepare:
+    subject: 1
+    
+analyze:
+    features: [9,12]
+    dendogram: [9,12]
+    
+    
+kmeans:
+    activity: 'walk'
